@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free online tool to convert code into JavaScript template strings. Quickly escape special characters and create template literals for your JS code.">
+    <meta name="keywords" content="JavaScript template strings, template literals, code converter, JS converter, backtick converter">
+    <meta name="author" content="JavaScript Tools">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="JavaScript Template String Converter">
+    <meta property="og:description" content="Convert any code into JavaScript template strings with proper escaping. Free online tool for developers.">
+    <meta property="og:type" content="website">
+    <title>JavaScript Template String Converter | Online Code to Template Literal Tool</title>
+    <style>
+        :root {
+            --primary-color: #f59e0b;
+            --bg-color: #121212;
+            --panel-color: #1f1f1f;
+            --text-color: #ffffff;
+            --border-radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        header {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        p.description {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+            max-width: 600px;
+        }
+
+        .converter-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .converter-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: var(--panel-color);
+            border: 1px solid #333;
+            border-radius: var(--border-radius);
+            color: var(--text-color);
+            font-size: 1rem;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .code-panel {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--panel-color);
+            border: 1px solid #333;
+            border-radius: var(--border-radius);
+            color: var(--text-color);
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+            overflow-x: hidden;
+            field-sizing: content;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: var(--primary-color);
+            color: #000000;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        button:hover {
+            background-color: #e8930a;
+        }
+
+        button:active {
+            transform: translateY(2px);
+        }
+
+        #copyBtn.copied {
+            background-color: #22c55e;
+        }
+
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            color: #737373;
+            font-size: 0.9rem;
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: #a0a0a0;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JavaScript Template String Converter</h1>
+            <p class="description">Convert your code into JavaScript template strings with proper escaping of backticks, dollar signs, and backslashes.</p>
+        </header>
+
+        <div class="input-group">
+            <label for="name-const">Variable Name</label>
+            <input type="text" id="name-const" placeholder="Variable name" value="code">
+        </div>
+
+        <div class="converter-container">
+            <div class="code-panel">
+                <label for="input">Input Code</label>
+                <textarea id="input" placeholder="Paste your code here..."></textarea>
+                <button type="button" onclick="convertCode()">Convert to Template String</button>
+                <p class="help-text">Paste any code that you want to convert into a JavaScript template string.</p>
+            </div>
+            
+            <div class="code-panel">
+                <label for="output">Result</label>
+                <textarea id="output" placeholder="Result will appear here..." readonly></textarea>
+                <button id="copyBtn" onclick="copyResult()">Copy to Clipboard</button>
+                <p class="help-text">The result will be properly escaped for use in JavaScript template literals.</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>2025 JavaScript Template String Converter - A Free Tool for Developers</p>
+        </footer>
+    </div>
+
+    <script>
+        function escapeCode(code) {
+            return code
+                .replace(/\\/g, '\\\\')   // Escape backslashes first
+                .replace(/`/g, '\\`')      // Escape backticks
+                .replace(/\${/g, '\\${');  // Escape string interpolation
+        }
+
+        function convertCode() {
+            const variableName = document.getElementById('name-const').value.trim() || 'code';
+            const input = document.getElementById('input').value;
+            
+            if (!input.trim()) {
+                document.getElementById('output').value = '';
+                return;
+            }
+            
+            const escapedCode = escapeCode(input);
+            const result = `const ${variableName} = \`${escapedCode}\`;`;
+            
+            document.getElementById('output').value = result;
+        }
+
+        function copyResult() {
+            const output = document.getElementById('output');
+            if (!output.value.trim()) return;
+            
+            output.select();
+            
+            try {
+                navigator.clipboard.writeText(output.value);
+                const copyBtn = document.getElementById('copyBtn');
+                copyBtn.textContent = 'Copied!';
+                copyBtn.classList.add('copied');
+                
+                setTimeout(() => {
+                    copyBtn.textContent = 'Copy to Clipboard';
+                    copyBtn.classList.remove('copied');
+                }, 1500);
+            } catch (err) {
+                alert('Failed to copy text. Please try again.');
+            }
+        }
+        
+        // Initialize with focus on input
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('input');
+            if (!input.value) {
+                input.focus();
+            }
+        });
+    </script>
+</body>
+</html>
