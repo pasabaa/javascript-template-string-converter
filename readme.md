@@ -39,7 +39,7 @@ The converter automatically handles escaping of special characters that would ot
 
 ## 🌐 Live Demo
 
-Try it now: [JavaScript Template String Converter](https://pasabaa.github.io/js-template-string-converter)
+Try it now: [JavaScript Template String Converter](https://javascript-template-string-converter.vercel.app/)
 
 ## 🧰 Development
 
